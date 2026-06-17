@@ -2,9 +2,46 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Instructor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_time = models.BooleanField(default=True)
+    total_learners = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username
+
+
+class Learner(models.Model):
+    STUDENT = 'student'
+    DEVELOPER = 'developer'
+    DATA_SCIENTIST = 'data_scientist'
+    DATABASE_ADMIN = 'database_admin'
+    OTHER = 'other'
+
+    OCCUPATION_CHOICES = [
+        (STUDENT, 'Student'),
+        (DEVELOPER, 'Developer'),
+        (DATA_SCIENTIST, 'Data Scientist'),
+        (DATABASE_ADMIN, 'Database Admin'),
+        (OTHER, 'Other'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    occupation = models.CharField(
+        max_length=30,
+        choices=OCCUPATION_CHOICES,
+        default=STUDENT
+    )
+    social_link = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Course(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    instructors = models.ManyToManyField(Instructor, blank=True)
 
     def __str__(self):
         return self.name

@@ -65,3 +65,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.app.github.dev',
+    'https://*.github.dev',
+    'https://localhost:8000',
+]
